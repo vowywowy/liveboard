@@ -1,4 +1,15 @@
-//express, mysql, http, socket.io
+/*
+	THESE ARE THE MYSQL VARIABLES THAT NEED TO BE MODIFIED
+*/
+var mysqlUser = "root", 	//put an appropriate MySQL username
+	mysqlPassword = "root",	//put the password for the above user
+	mysqlDatabase = "ctf",	//put the name of the database where the desired table is
+	tableToMirror = "TEAMS";//put the name of the table you want displayed
+/*
+	END OF THE MYSQL VARIABLES THAT NEED TO BE MODIFIED
+*/
+
+//packages
 var express = require("express");
 var app = express();
 var path = require('path');
@@ -6,16 +17,18 @@ var mysql = require("mysql");
 var http = require('http').Server(app);
 var io = require("socket.io")(http);
 
+//express paths
 app.use(express.static(path.join(__dirname, 'public')));
 app.get("/", function (req, res) {
 	res.sendFile(__dirname + '/index.html');
 });
 
+//mysql connection
 var db = mysql.createConnection({
 	host: 'localhost',
-	user: 'root',
-	password: 'root',
-	database: 'ctf'
+	user: mysqlUser,
+	password: mysqlPassword,
+	database: mysqlDatabase
 });
 db.connect(function (err) {
 	if (err) console.log(err)
@@ -25,7 +38,6 @@ var users = 0,
 	results = [];
 
 io.sockets.on('connection', function (socket) {
-	//show connected users
 	users++;
 	io.sockets.emit('users', users);
 	socket.on('disconnect', function () {
@@ -34,7 +46,7 @@ io.sockets.on('connection', function (socket) {
 	});
 
 	//query
-	db.query('SELECT * FROM teams')
+	db.query('SELECT * FROM ' + tableToMirror)
 		.on('result', function (data) {
 			results.push(data);
 		})
@@ -51,8 +63,8 @@ http.listen(3000, function () {
 var ZongJi = require('zongji');
 var zongji = new ZongJi({
 	host: 'localhost',
-	user: 'zongji',
-	password: 'zongji',
+	user: 'zongji', 	//this is the zongji user you can modify
+	password: 'zongji',	//this is the zongji user's password that you can modify
 });
 
 zongji.start({
