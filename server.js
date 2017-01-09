@@ -40,17 +40,17 @@ var users = 0,
 io.sockets.on('connection', function (socket) {
 	users++;
 	io.sockets.emit('users', users);
-	socket.on('disconnect', function () {
+	socket.on('disconnect', () => {
 		users--;
 		io.sockets.emit('users', users);
 	});
 
 	//query
 	db.query('SELECT * FROM ' + tableToMirror)
-		.on('result', function (data) {
+		.on('result', (data) => {
 			results.push(data);
 		})
-		.on('end', function () {
+		.on('end', () => {
 			socket.emit('results', results)
 		});
 	results = [];

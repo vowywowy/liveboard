@@ -1,8 +1,8 @@
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", function() {
 	var socket = io.connect('http://localhost:3000');
 
 	//initial query result event
-	socket.on('results', (results, callback) => {
+	socket.on('results', function(results, callback) {
 		//getting the amount of columns in the query
 		var rowNames = Object.getOwnPropertyNames(results[0]),
 			html = `<table id="liveboard">
@@ -37,12 +37,12 @@ document.addEventListener("DOMContentLoaded", () => {
 	});
 
 	//display the amount of users watching
-	socket.on('users', (users) => {
+	socket.on('users', function(users) {
 		document.getElementById("users").innerHTML = "Users connected: " + users;
 	});
 
 	//the update event
-	socket.on('update',  (update, callback) => {
+	socket.on('update',  function(update, callback) {
 		if (update) {
 			var liveboard = document.getElementById("liveboard");
 			try {
