@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", function() {
-	var socket = io.connect('http://localhost:3000');
+	var socket = io();
 
 	//initial query result event
 	socket.on('results', function(results, callback) {
